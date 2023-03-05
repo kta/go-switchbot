@@ -75,7 +75,7 @@ type webhookQueryResponse struct {
 
 // Query retrieves the current configuration info of the webhook.
 // The second argument `url` is required for QueryDetails action type.
-func (svc *WebhookService) Query(ctx context.Context, action WebhookQueryActionType, url string) error {
+func (svc *WebhookService) Query(ctx context.Context, action WebhookQueryActionType, url string) (io.ReadCloser, error) {
 	const path = "/v1.1/webhook/queryWebhook"
 
 	req := webhookQueryRequest{
@@ -85,7 +85,7 @@ func (svc *WebhookService) Query(ctx context.Context, action WebhookQueryActionT
 	switch action {
 	case QueryDetails:
 		if url == "" {
-			return errors.New("URL need to be specified when the action is queryDetails")
+			return nil, errors.New("URL need to be specified when the action is queryDetails")
 		}
 
 		req.URLs = []string{url}
@@ -93,11 +93,11 @@ func (svc *WebhookService) Query(ctx context.Context, action WebhookQueryActionT
 
 	resp, err := svc.c.post(ctx, path, req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Close()
 
-	return nil
+	return resp.Body, nil
 }
 
 type webhookUpdateRequest struct {
@@ -111,7 +111,7 @@ type webhookConfig struct {
 }
 
 // Update do update the configuration of the webhook.
-func (svc *WebhookService) Update(ctx context.Context, url string, enable bool) error {
+func (svc *WebhookService) Update(ctx context.Context, url string, enable bool) (io.ReadCloser, error) {
 	const path = "/v1.1/webhook/queryWebhook"
 
 	req := webhookUpdateRequest{
@@ -124,11 +124,11 @@ func (svc *WebhookService) Update(ctx context.Context, url string, enable bool) 
 
 	resp, err := svc.c.post(ctx, path, req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Close()
 
-	return nil
+	return resp.Body, nil
 }
 
 type webhookDeleteRequest struct {
@@ -137,7 +137,7 @@ type webhookDeleteRequest struct {
 }
 
 // Delete do delete the configuration of the webhook.
-func (svc *WebhookService) Delete(ctx context.Context, url string) error {
+func (svc *WebhookService) Delete(ctx context.Context, url string) (io.ReadCloser, error) {
 	const path = "/v1.1/webhook/deleteWebhook"
 
 	req := webhookDeleteRequest{
@@ -147,11 +147,11 @@ func (svc *WebhookService) Delete(ctx context.Context, url string) error {
 
 	resp, err := svc.c.del(ctx, path, req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Close()
 
-	return nil
+	return resp.Body, nil
 }
 
 func deviceTypeFromWebhookRequest(r *http.Request) (string, error) {

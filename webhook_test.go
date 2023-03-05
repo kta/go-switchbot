@@ -75,7 +75,7 @@ func TestWebhookQuery(t *testing.T) {
 
 		c := switchbot.New("", "", switchbot.WithEndpoint(srv.URL))
 
-		if err := c.Webhook().Query(context.Background(), switchbot.QueryURL, ""); err != nil {
+		if _, err := c.Webhook().Query(context.Background(), switchbot.QueryURL, ""); err != nil {
 			t.Fatal(err)
 		}
 	})
@@ -108,7 +108,7 @@ func TestWebhookQuery(t *testing.T) {
 
 		c := switchbot.New("", "", switchbot.WithEndpoint(srv.URL))
 
-		if err := c.Webhook().Query(context.Background(), switchbot.QueryDetails, "url1"); err != nil {
+		if _, err := c.Webhook().Query(context.Background(), switchbot.QueryDetails, "url1"); err != nil {
 			t.Fatal(err)
 		}
 	})
@@ -145,7 +145,7 @@ func TestWebhookUpdate(t *testing.T) {
 
 	c := switchbot.New("", "", switchbot.WithEndpoint(srv.URL))
 
-	if err := c.Webhook().Update(context.Background(), "url1", true); err != nil {
+	if _, err := c.Webhook().Update(context.Background(), "url1", true); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -178,7 +178,7 @@ func TestWebhookDelete(t *testing.T) {
 
 	c := switchbot.New("", "", switchbot.WithEndpoint(srv.URL))
 
-	if err := c.Webhook().Delete(context.Background(), "url1"); err != nil {
+	if _, err := c.Webhook().Delete(context.Background(), "url1"); err != nil {
 		t.Fatal(err)
 	}
 }
