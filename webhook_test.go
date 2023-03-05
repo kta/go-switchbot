@@ -41,7 +41,7 @@ func TestWebhookSetup(t *testing.T) {
 
 	c := switchbot.New("", "", switchbot.WithEndpoint(srv.URL))
 
-	if err := c.Webhook().Setup(context.Background(), "url1", "ALL"); err != nil {
+	if _, err := c.Webhook().Setup(context.Background(), "url1", "ALL"); err != nil {
 		t.Fatal(err)
 	}
 }
