@@ -185,6 +185,7 @@ func (c *Client) do(ctx context.Context, method, path string, body io.Reader) (*
 	nonce := uuid.New().String()
 	t := strconv.FormatInt(time.Now().UnixMilli(), 10)
 	sign := hmacSHA256String(c.openToken+t+nonce, c.secretKey)
+	fmt.Println(sign)
 
 	req, err := http.NewRequestWithContext(ctx, method, c.endpoint+path, body)
 
@@ -197,6 +198,8 @@ func (c *Client) do(ctx context.Context, method, path string, body io.Reader) (*
 	req.Header.Add("nonce", nonce)
 	req.Header.Add("t", t)
 	req.Header.Add("Content-Type", "application/json; charset=utf8")
+
+	fmt.Println(req.Header)
 
 	if c.debug {
 		dump, err := httputil.DumpRequestOut(req, true)
